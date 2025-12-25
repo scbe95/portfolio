@@ -1,114 +1,167 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stephen | AI Engineer</title>
+    <title>Stephen | Level 1 AI Engineer</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        
-        /* The "AI Glow" Animation */
-        .blob {
-            position: absolute;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.6;
-            animation: move 10s infinite alternate;
+        /* Lofi Aesthetic Variables */
+        :root {
+            --bg-dark: #2d1b4e;
+            --accent-pink: #d946ef;
+            --accent-cyan: #22d3ee;
         }
-        @keyframes move {
-            from { transform: translate(0, 0) scale(1); }
-            to { transform: translate(20px, -20px) scale(1.1); }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: #e0e7ff;
+            font-family: 'VT323', monospace; /* Retro terminal font */
+            overflow-x: hidden;
+        }
+
+        /* Scanline Effect (Old TV Look) */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            z-index: 99;
+            pointer-events: none;
+        }
+
+        /* Animated Sunset Background */
+        .lofi-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, #1e1b4b, #4c1d95, #be185d);
+            z-index: -2;
+        }
+        .sun {
+            position: absolute;
+            bottom: 20%; left: 50%;
+            transform: translateX(-50%);
+            width: 300px; height: 300px;
+            background: linear-gradient(to top, #fcd34d, #f59e0b);
+            border-radius: 50%;
+            box-shadow: 0 0 40px #f59e0b;
+            z-index: -1;
+        }
+
+        /* Typography Overrides */
+        h1, h2, .pixel-font { font-family: 'Press Start 2P', cursive; }
+
+        /* RPG Stat Bar Animation */
+        .stat-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #d946ef, #8b5cf6);
+            width: 0%;
+            transition: width 1.5s ease-out;
+        }
+        
+        /* Floating Animation */
+        .float { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-200 antialiased relative overflow-x-hidden">
+<body class="text-xl">
 
-    <div class="blob bg-purple-600 w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
-    <div class="blob bg-cyan-600 w-80 h-80 rounded-full bottom-0 right-0 translate-x-1/3 translate-y-1/3 animation-delay-2000"></div>
+    <div class="scanlines"></div>
+    <div class="lofi-bg"><div class="sun"></div></div>
 
-    <nav class="fixed w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
-                Stephen.AI
-            </a>
-            <div class="space-x-8 hidden md:block text-sm font-semibold text-slate-400">
-                <a href="#projects" class="hover:text-white transition">PROJECTS</a>
-                <a href="#skills" class="hover:text-white transition">SKILLS</a>
-                <a href="#contact" class="hover:text-white transition">CONTACT</a>
-            </div>
+    <nav class="fixed w-full z-50 top-0 p-6 flex justify-between items-center text-pink-300">
+        <div class="pixel-font text-xs md:text-sm animate-pulse">
+            <i class="fa-solid fa-gamepad"></i> PLAYER 1 READY
+        </div>
+        <div class="flex gap-6 text-xl">
+            <a href="https://github.com/scbe95" target="_blank" class="hover:text-white hover:underline decoration-wavy">GITHUB</a>
+            <a href="mailto:stephen@example.com" class="hover:text-white hover:underline decoration-wavy">CONTACT</a>
         </div>
     </nav>
 
-    <section class="h-screen flex flex-col justify-center items-center text-center px-6 pt-16">
-        <div class="inline-block px-3 py-1 mb-6 text-xs font-semibold tracking-wider text-cyan-300 uppercase bg-cyan-900/30 rounded-full border border-cyan-800">
-            Available for Hire
-        </div>
-        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
-            Building the <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Intelligent Future</span>
-        </h1>
-        <p class="text-lg md:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed">
-            I'm Stephen, an AI Software Engineer bridging the gap between complex models and real-world applications.
-        </p>
-        <div class="flex gap-4">
-            <a href="#projects" class="px-8 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-slate-200 transition shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-                View Work
-            </a>
-            <a href="https://github.com/scbe95" target="_blank" class="px-8 py-4 border border-slate-700 rounded-full hover:border-slate-500 transition">
-                <i class="fab fa-github mr-2"></i> GitHub
-            </a>
-        </div>
-    </section>
+    <main class="max-w-6xl mx-auto px-6 pt-32 pb-20 grid md:grid-cols-2 gap-12 items-center min-h-screen">
+        
+        <div class="space-y-8">
+            <div class="inline-block px-4 py-1 bg-black/40 rounded border border-pink-500/50 text-pink-300 text-lg mb-4">
+                LEVEL 10 ENGINEER
+            </div>
+            <h1 class="text-4xl md:text-5xl leading-snug text-white drop-shadow-[4px_4px_0_rgba(217,70,239,0.5)]">
+                STEPHEN BENOIT
+            </h1>
+            <p class="text-2xl text-purple-200 max-w-md bg-black/30 p-4 rounded-lg border-l-4 border-cyan-400">
+                "I build AI tools that feel like magic."
+            </p>
 
-    <section id="projects" class="py-24 bg-slate-800/50">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-3xl font-bold mb-16 text-center">Featured Projects</h2>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="group relative bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition duration-300">
-                    <div class="h-48 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
-                        <i class="fas fa-camera text-6xl text-slate-700 group-hover:text-cyan-400 transition duration-300"></i>
+            <div class="bg-black/60 border-2 border-slate-600 rounded-lg p-6 max-w-md float shadow-2xl">
+                <h3 class="pixel-font text-xs text-cyan-400 mb-6 border-b border-slate-600 pb-2">SKILL TREE</h3>
+                
+                <div class="mb-4">
+                    <div class="flex justify-between text-sm mb-1 text-pink-300">
+                        <span>PYTHON</span>
+                        <span>95%</span>
                     </div>
-                    <div class="p-8">
-                        <h3 class="text-xl font-bold text-white mb-2">Reseller Pro AI</h3>
-                        <p class="text-slate-400 text-sm mb-6">
-                            Computer Vision app that identifies items from photos, estimates value, and writes sales copy using Gemini 2.5.
-                        </p>
-                        <div class="flex gap-2 mb-6">
-                            <span class="px-3 py-1 text-xs bg-slate-800 rounded-full text-cyan-300">Python</span>
-                            <span class="px-3 py-1 text-xs bg-slate-800 rounded-full text-cyan-300">Flask</span>
-                            <span class="px-3 py-1 text-xs bg-slate-800 rounded-full text-cyan-300">Google Gemini</span>
-                        </div>
-                        <a href="https://stephens-reseller-app.onrender.com" target="_blank" class="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-semibold">
-                            Live Demo <i class="fas fa-arrow-right ml-2 text-xs"></i>
-                        </a>
+                    <div class="h-4 bg-slate-800 rounded-full border border-slate-600 overflow-hidden">
+                        <div class="stat-bar" style="width: 95%"></div>
                     </div>
                 </div>
 
-                <div class="group relative bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-purple-500/50 transition duration-300">
-                    <div class="h-48 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
-                        <i class="fas fa-brain text-6xl text-slate-700 group-hover:text-purple-400 transition duration-300"></i>
+                <div class="mb-4">
+                    <div class="flex justify-between text-sm mb-1 text-cyan-300">
+                        <span>AI / GEMINI</span>
+                        <span>85%</span>
                     </div>
-                    <div class="p-8">
-                        <h3 class="text-xl font-bold text-white mb-2">Coming Soon</h3>
-                        <p class="text-slate-400 text-sm mb-6">
-                            Currently building a financial analysis agent using LangChain and OpenAI.
-                        </p>
-                        <div class="flex gap-2 mb-6">
-                            <span class="px-3 py-1 text-xs bg-slate-800 rounded-full text-purple-300">LLMs</span>
-                            <span class="px-3 py-1 text-xs bg-slate-800 rounded-full text-purple-300">RAG</span>
-                        </div>
+                    <div class="h-4 bg-slate-800 rounded-full border border-slate-600 overflow-hidden">
+                        <div class="stat-bar bg-cyan-500" style="background: linear-gradient(90deg, #06b6d4, #22d3ee);"></div> <div style="width: 85%; height: 100%; background: linear-gradient(90deg, #0891b2, #22d3ee);"></div>
+                    </div>
+                </div>
+
+                <div class="mb-0">
+                    <div class="flex justify-between text-sm mb-1 text-yellow-300">
+                        <span>WEB DEV</span>
+                        <span>80%</span>
+                    </div>
+                    <div class="h-4 bg-slate-800 rounded-full border border-slate-600 overflow-hidden">
+                        <div style="width: 80%; height: 100%; background: linear-gradient(90deg, #d97706, #fbbf24);"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <footer class="py-12 text-center text-slate-500 text-sm border-t border-slate-800">
-        <p>&copy; 2025 Stephen. Built with <i class="fas fa-heart text-red-500"></i> and AI.</p>
-    </footer>
+        <div class="relative group">
+            <div class="bg-slate-800 p-4 rounded-t-xl rounded-b-lg border-4 border-slate-700 shadow-2xl relative z-10">
+                <div class="bg-black text-green-400 px-4 py-2 font-mono text-sm flex justify-between items-center border-b border-slate-700">
+                    <span>> ./launch_reseller_pro.exe</span>
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    </div>
+                </div>
+                
+                <div class="bg-white h-[400px] w-full overflow-hidden relative">
+                    <div class="absolute inset-0 bg-black flex flex-col justify-center items-center text-green-500 z-0">
+                        <span class="pixel-font text-xs animate-pulse">INITIALIZING SYSTEM...</span>
+                    </div>
+                    <iframe src="https://stephens-reseller-app.onrender.com" class="w-full h-full relative z-10 border-0" title="Reseller App"></iframe>
+                </div>
+            </div>
+            
+            <div class="absolute -inset-4 bg-gradient-to-r from-pink-600 to-purple-600 rounded-xl blur-xl opacity-50 group-hover:opacity-75 transition duration-1000 z-0"></div>
+            
+            <div class="text-center mt-6">
+                <a href="https://stephens-reseller-app.onrender.com" target="_blank" class="inline-block px-8 py-3 bg-pink-600 text-white font-bold rounded pixel-font text-xs hover:bg-pink-500 hover:scale-105 transition shadow-[4px_4px_0_black]">
+                    PLAY DEMO
+                </a>
+            </div>
+        </div>
+
+    </main>
 
 </body>
 </html>
