@@ -3,313 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stephen | Interactive Portfolio</title>
+    <title>Stephen's OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
     <style>
         :root {
             --bg-color: #1a1b26;
-            --wall-color: #24283b;
-            --accent: #7aa2f7;
-            --glow: #bb9af7;
+            --window-bg: #1f2937;
+            --header-bg: #111827;
+            --neon-pink: #d946ef;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: white;
+            margin: 0;
+            overflow: hidden;
             font-family: 'VT323', monospace;
-            overflow: hidden; /* No scrolling, it's a game scene */
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: black;
+            color: white;
+            user-select: none; /* Feel like an OS */
         }
 
-        /* --- THE ROOM SCENE --- */
-        .room-container {
-            position: relative;
-            width: 800px;
-            height: 600px;
-            background: var(--wall-color);
-            border: 4px solid #414868;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            overflow: hidden;
-            /* Room Perspective */
-            perspective: 1000px;
-        }
-
-        /* The Window (Background) */
-        .window {
-            position: absolute;
-            top: 50px; left: 100px;
-            width: 200px; height: 150px;
-            background: linear-gradient(to bottom, #1d1730, #6d3b5e); /* Sunset */
-            border: 8px solid #16161e;
-            box-shadow: 0 0 20px rgba(187, 154, 247, 0.2);
-            cursor: pointer;
-            transition: transform 0.2s;
-            z-index: 1;
-        }
-        .window:hover { transform: scale(1.05); border-color: var(--glow); }
-        .moon {
-            position: absolute; top: 20px; right: 20px;
-            width: 30px; height: 30px; background: #e0af68; border-radius: 50%;
-            box-shadow: 0 0 10px #e0af68;
-        }
-
-        /* The Bookshelf (Skills) */
-        .shelf {
-            position: absolute;
-            top: 100px; right: 80px;
-            width: 150px; height: 200px;
-            background: #565f89;
-            border: 4px solid #16161e;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            padding: 10px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            z-index: 2;
-        }
-        .shelf:hover { transform: scale(1.05); border-color: var(--glow); }
-        .book { height: 30px; width: 100%; background: #f7768e; margin-bottom: 5px; border-radius: 2px; }
-        .book:nth-child(2) { background: #7aa2f7; width: 80%; }
-        .book:nth-child(3) { background: #9ece6a; width: 90%; }
-
-        /* The Desk Area */
-        .desk {
-            position: absolute;
-            bottom: 0; left: 50%;
-            transform: translateX(-50%);
-            width: 600px; height: 200px;
-            background: #414868;
-            border-top: 10px solid #24283b;
-            z-index: 10;
-        }
-
-        /* The Computer (Projects) */
-        .monitor {
-            position: absolute;
-            bottom: 120px; left: 50%;
-            transform: translateX(-50%);
-            width: 220px; height: 160px;
-            background: #16161e;
-            border: 4px solid #565f89;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            z-index: 11;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .monitor:hover { transform: translateX(-50%) scale(1.05); border-color: var(--accent); }
-        .screen-glow {
-            width: 100%; height: 100%;
-            background: radial-gradient(circle, #24283b 0%, #16161e 100%);
-            display: flex; flex-direction: column; justify-content: center; items-center;
-        }
-        .code-lines {
-            width: 80%; height: 2px; background: #9ece6a; margin: 4px 0; opacity: 0.7;
-            animation: type 2s infinite;
-        }
-        @keyframes type { 0% { width: 0; } 50% { width: 80%; } 100% { width: 80%; } }
-
-        /* The Person (You) */
-        .person {
-            position: absolute;
-            bottom: 50px; left: 50%;
-            transform: translateX(-50%);
-            font-size: 140px;
-            color: #c0caf5;
-            text-shadow: 0 5px 10px rgba(0,0,0,0.5);
-            z-index: 12;
-            pointer-events: none; /* Let clicks pass through to desk/monitor */
-        }
-        .speech-bubble {
-            position: absolute;
-            top: -60px; right: -80px;
-            background: white; color: black;
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 10px;
-            opacity: 0;
-            animation: popIn 1s ease-out forwards 1s;
-        }
-        @keyframes popIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
-
-        /* --- UI MODALS (Popups) --- */
-        .modal {
+        /* --- WALLPAPER --- */
+        .wallpaper {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
+            /* This is the LOFI GIF Background */
+            background-image: url('https://media.giphy.com/media/LHTJg2I2638C5ZPsyi/giphy.gif');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.6; /* Dimmed so icons pop */
+            z-index: -1;
         }
-        .modal-content {
-            background: #1a1b26;
-            border: 2px solid var(--accent);
-            padding: 30px;
-            width: 90%; max-width: 600px;
-            border-radius: 10px;
-            box-shadow: 0 0 30px var(--accent);
-            position: relative;
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* --- DESKTOP ICONS --- */
+        .desktop-icons {
+            position: absolute;
+            top: 20px; left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 10;
+        }
+        .icon {
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            transition: 0.2s;
+            text-shadow: 2px 2px 0 #000;
+        }
+        .icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .icon i { font-size: 32px; margin-bottom: 5px; filter: drop-shadow(0 0 5px rgba(0,0,0,0.8)); }
+        .icon span { background: rgba(0,0,0,0.5); padding: 2px 4px; border-radius: 4px; }
+
+        /* --- WINDOWS --- */
+        .window {
+            position: absolute;
+            width: 600px;
+            background: var(--window-bg);
+            border: 2px solid #4b5563;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            z-index: 100;
+            overflow: hidden;
+        }
+        .window-header {
+            background: var(--header-bg);
+            padding: 8px 12px;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            border-bottom: 1px solid #374151;
+            cursor: grab;
         }
         .close-btn {
-            position: absolute; top: 10px; right: 15px;
-            color: #f7768e; cursor: pointer; font-size: 24px;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 18px;
         }
-        
-        /* Tooltips */
-        .label {
-            position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%);
-            background: black; padding: 4px 8px; font-size: 12px; border-radius: 4px;
-            opacity: 0; transition: opacity 0.2s; white-space: nowrap; pointer-events: none;
+        .window-body {
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(31, 41, 55, 0.95);
         }
-        .hover-target:hover .label { opacity: 1; }
+
+        /* --- TASKBAR --- */
+        .taskbar {
+            position: fixed;
+            bottom: 0; width: 100%; height: 45px;
+            background: rgba(17, 24, 39, 0.9);
+            border-top: 1px solid #374151;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .start-btn {
+            background: linear-gradient(to right, #d946ef, #8b5cf6);
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 0 10px rgba(217, 70, 239, 0.3);
+        }
 
     </style>
 </head>
 <body>
 
-    <div class="room-container">
+    <div class="wallpaper"></div>
+    <div class="scanlines"></div>
+
+    <div class="desktop-icons">
         
-        <div class="window hover-target" onclick="openModal('about')">
-            <div class="moon"></div>
-            <div class="label">ABOUT & CONTACT</div>
+        <div class="icon" onclick="openWindow('about-window')">
+            <i class="fa-solid fa-user-astronaut text-cyan-400"></i><br>
+            <span>About_Me.txt</span>
         </div>
 
-        <div class="shelf hover-target" onclick="openModal('skills')">
-            <div class="book"></div>
-            <div class="book"></div>
-            <div class="book"></div>
-            <div class="book"></div>
-            <div class="label">SKILLS & KNOWLEDGE</div>
+        <div class="icon" onclick="openWindow('projects-window')">
+            <i class="fa-solid fa-folder-open text-yellow-400"></i><br>
+            <span>My_Projects</span>
         </div>
 
-        <div class="monitor hover-target" onclick="openModal('projects')">
-            <div class="screen-glow">
-                <i class="fa-solid fa-code text-green-400 text-2xl mb-2"></i>
-                <div class="code-lines"></div>
-                <div class="code-lines" style="width: 60%"></div>
-            </div>
-            <div class="label">VIEW PROJECTS</div>
+        <div class="icon" onclick="openWindow('skills-window')">
+            <i class="fa-solid fa-microchip text-pink-400"></i><br>
+            <span>Skills.exe</span>
         </div>
 
-        <div class="person">
-            <i class="fa-solid fa-user-astronaut"></i>
-            <div class="speech-bubble">Click objects to explore!</div>
+        <div class="icon" onclick="window.open('https://github.com/scbe95', '_blank')">
+            <i class="fa-brands fa-github text-white"></i><br>
+            <span>GitHub</span>
         </div>
-
-        <div class="desk"></div>
 
     </div>
 
-    <div id="projects" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('projects')">&times;</span>
-            <h2 class="text-2xl text-cyan-400 font-bold mb-4 pixel-font">MY PROJECTS</h2>
+    <div id="projects-window" class="window" style="top: 10%; left: 30%;">
+        <div class="window-header">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-folder text-yellow-400"></i> 
+                <span>C:\Stephen\Projects</span>
+            </div>
+            <i class="fa-solid fa-xmark close-btn" onclick="closeWindow('projects-window')"></i>
+        </div>
+        <div class="window-body">
             
-            <div class="bg-gray-800 p-4 rounded mb-4 border-l-4 border-green-400">
-                <h3 class="text-xl font-bold">Reseller Pro Vision</h3>
-                <p class="text-gray-400 text-sm my-2">Computer vision app that prices items and writes eBay listings automatically.</p>
-                <div class="flex gap-2 text-xs mb-3">
-                    <span class="bg-blue-900 px-2 py-1 rounded">Python</span>
-                    <span class="bg-blue-900 px-2 py-1 rounded">Flask</span>
-                    <span class="bg-blue-900 px-2 py-1 rounded">Generative AI</span>
+            <div class="bg-gray-800 p-4 rounded mb-4 border border-gray-600 hover:border-cyan-400 transition cursor-pointer" onclick="window.open('https://stephens-reseller-app.onrender.com','_blank')">
+                <div class="flex justify-between items-start">
+                    <h3 class="text-xl text-cyan-400 font-bold">Reseller Pro Vision</h3>
+                    <span class="text-xs bg-green-900 text-green-300 px-2 py-1 rounded">LIVE</span>
                 </div>
-                <a href="https://stephens-reseller-app.onrender.com" target="_blank" class="text-green-400 hover:underline">
-                    <i class="fa-solid fa-play"></i> Launch App
-                </a>
+                <p class="text-gray-300 text-sm my-2">AI-powered item analyzer for resellers. Identifies items from photos and prices them instantly.</p>
+                <div class="flex gap-2 text-xs mt-3">
+                    <span class="bg-gray-700 px-2 py-1 rounded">Python</span>
+                    <span class="bg-gray-700 px-2 py-1 rounded">Flask</span>
+                    <span class="bg-gray-700 px-2 py-1 rounded">Gemini AI</span>
+                </div>
             </div>
 
-            <div class="bg-gray-800 p-4 rounded border-l-4 border-purple-400">
-                <h3 class="text-xl font-bold">Interactive Portfolio</h3>
-                <p class="text-gray-400 text-sm my-2">The website you are looking at right now. A pure CSS/HTML isometric room.</p>
-                <div class="flex gap-2 text-xs mb-3">
-                    <span class="bg-blue-900 px-2 py-1 rounded">HTML5</span>
-                    <span class="bg-blue-900 px-2 py-1 rounded">Tailwind</span>
+            <div class="bg-gray-800 p-4 rounded border border-gray-600">
+                <h3 class="text-xl text-pink-400 font-bold">Virtual OS Portfolio</h3>
+                <p class="text-gray-300 text-sm my-2">Interactive web desktop built with HTML/CSS and jQuery UI.</p>
+                <div class="flex gap-2 text-xs mt-3">
+                    <span class="bg-gray-700 px-2 py-1 rounded">Frontend</span>
+                    <span class="bg-gray-700 px-2 py-1 rounded">UI/UX</span>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <div id="skills" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('skills')">&times;</span>
-            <h2 class="text-2xl text-pink-400 font-bold mb-6 pixel-font">TECH STACK</h2>
-            
+    <div id="about-window" class="window" style="top: 15%; left: 15%;">
+        <div class="window-header">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-file-lines text-blue-400"></i> 
+                <span>About_Me.txt - Notepad</span>
+            </div>
+            <i class="fa-solid fa-xmark close-btn" onclick="closeWindow('about-window')"></i>
+        </div>
+        <div class="window-body font-mono text-sm leading-relaxed">
+            <p>> INITIALIZING USER PROFILE...</p>
+            <br>
+            <p><strong>NAME:</strong> Stephen Benoit</p>
+            <p><strong>ROLE:</strong> AI & Software Developer</p>
+            <p><strong>LOCATION:</strong> [Your Location]</p>
+            <br>
+            <p>> BIO:</p>
+            <p>I am a developer who loves building tools that feel like magic. I specialize in Python automation, AI integration, and creative frontend experiences.</p>
+            <br>
+            <p>> CONTACT:</p>
+            <a href="mailto:stephen@example.com" class="text-cyan-400 hover:underline">stephen@example.com</a>
+        </div>
+    </div>
+
+    <div id="skills-window" class="window" style="top: 20%; left: 40%;">
+        <div class="window-header">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-microchip text-pink-400"></i> 
+                <span>System_Stats.exe</span>
+            </div>
+            <i class="fa-solid fa-xmark close-btn" onclick="closeWindow('skills-window')"></i>
+        </div>
+        <div class="window-body">
             <div class="grid grid-cols-2 gap-4">
-                <div class="flex items-center gap-3">
-                    <i class="fa-brands fa-python text-yellow-400 text-2xl"></i>
-                    <div>
-                        <div class="font-bold">Python</div>
-                        <div class="text-xs text-gray-400">Backend & Scripting</div>
-                    </div>
+                <div class="bg-black/30 p-3 rounded text-center border border-gray-700">
+                    <i class="fa-brands fa-python text-3xl text-yellow-400 mb-2"></i>
+                    <div class="font-bold">PYTHON</div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-brain text-purple-400 text-2xl"></i>
-                    <div>
-                        <div class="font-bold">Generative AI</div>
-                        <div class="text-xs text-gray-400">LLM Integration (Gemini/OpenAI)</div>
-                    </div>
+                <div class="bg-black/30 p-3 rounded text-center border border-gray-700">
+                    <i class="fa-solid fa-robot text-3xl text-purple-400 mb-2"></i>
+                    <div class="font-bold">AI / LLMs</div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-flask text-white text-2xl"></i>
-                    <div>
-                        <div class="font-bold">Flask</div>
-                        <div class="text-xs text-gray-400">Web Frameworks</div>
-                    </div>
+                <div class="bg-black/30 p-3 rounded text-center border border-gray-700">
+                    <i class="fa-solid fa-code text-3xl text-green-400 mb-2"></i>
+                    <div class="font-bold">WEB DEV</div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <i class="fa-brands fa-git-alt text-red-500 text-2xl"></i>
-                    <div>
-                        <div class="font-bold">Git / GitHub</div>
-                        <div class="text-xs text-gray-400">Version Control</div>
-                    </div>
+                <div class="bg-black/30 p-3 rounded text-center border border-gray-700">
+                    <i class="fa-brands fa-git-alt text-3xl text-red-500 mb-2"></i>
+                    <div class="font-bold">GIT</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="about" class="modal">
-        <div class="modal-content text-center">
-            <span class="close-btn" onclick="closeModal('about')">&times;</span>
-            <div class="w-20 h-20 bg-gray-700 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl">
-                <i class="fa-solid fa-user"></i>
-            </div>
-            <h2 class="text-2xl font-bold mb-2">Stephen Benoit</h2>
-            <p class="text-gray-400 mb-6">Junior AI & Software Developer</p>
-            <p class="text-sm leading-relaxed mb-6">
-                I am a passionate developer building tools that solve real problems. I specialize in connecting AI models to practical applications.
-            </p>
-            <a href="mailto:stephen@example.com" class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded font-bold transition">
-                <i class="fa-solid fa-envelope"></i> Send Message
-            </a>
+    <div class="taskbar">
+        <div class="start-btn cursor-pointer hover:opacity-80">
+            <i class="fa-brands fa-windows"></i> Start
+        </div>
+        <div class="ml-4 px-3 py-1 bg-gray-700/50 rounded text-sm text-gray-300 border-b-2 border-cyan-400">
+            Portfolio.os
+        </div>
+        <div class="ml-auto text-sm text-cyan-400 font-mono" id="clock">
+            12:00 PM
         </div>
     </div>
 
     <script>
-        function openModal(id) {
-            document.getElementById(id).style.display = 'flex';
+        // Make windows draggable using jQuery UI
+        $( function() {
+            $( ".window" ).draggable({ handle: ".window-header", containment: "body" });
+        });
+
+        // Window Management
+        function openWindow(id) {
+            $(".window").hide(); // Close others for focus
+            $("#" + id).css("display", "flex");
         }
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
+
+        function closeWindow(id) {
+            $("#" + id).hide();
         }
-        // Close modal if clicking outside box
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = "none";
-            }
+
+        // Clock Function
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         }
+        setInterval(updateClock, 1000);
+        updateClock();
     </script>
 
 </body>
