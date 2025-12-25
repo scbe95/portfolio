@@ -3,220 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stephen | AI Developer</title>
+    <title>Stephen | Interactive Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg-dark: #1a1625;
-            --neon-pink: #ff00ff;
-            --neon-blue: #00ffff;
+            --bg-color: #1a1b26;
+            --wall-color: #24283b;
+            --accent: #7aa2f7;
+            --glow: #bb9af7;
         }
-        
+
         body {
-            background-color: var(--bg-dark);
-            color: #e0e7ff;
+            background-color: var(--bg-color);
+            color: white;
             font-family: 'VT323', monospace;
-            overflow-x: hidden;
-            margin: 0;
+            overflow: hidden; /* No scrolling, it's a game scene */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* --- CRT MONITOR EFFECTS --- */
-        /* The slight curve of an old screen */
-        .crt-frame {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.4) 100%);
-            pointer-events: none;
-            z-index: 100;
-        }
-        /* Scanlines */
-        .scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 99;
+        /* --- THE ROOM SCENE --- */
+        .room-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            background: var(--wall-color);
+            border: 4px solid #414868;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+            /* Room Perspective */
+            perspective: 1000px;
         }
 
-        /* --- ANIMATED BACKGROUND --- */
-        .stars {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #0f0c29;
-            background: linear-gradient(to bottom, #240b36, #c31432);
-            z-index: -2;
+        /* The Window (Background) */
+        .window {
+            position: absolute;
+            top: 50px; left: 100px;
+            width: 200px; height: 150px;
+            background: linear-gradient(to bottom, #1d1730, #6d3b5e); /* Sunset */
+            border: 8px solid #16161e;
+            box-shadow: 0 0 20px rgba(187, 154, 247, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 1;
+        }
+        .window:hover { transform: scale(1.05); border-color: var(--glow); }
+        .moon {
+            position: absolute; top: 20px; right: 20px;
+            width: 30px; height: 30px; background: #e0af68; border-radius: 50%;
+            box-shadow: 0 0 10px #e0af68;
+        }
+
+        /* The Bookshelf (Skills) */
+        .shelf {
+            position: absolute;
+            top: 100px; right: 80px;
+            width: 150px; height: 200px;
+            background: #565f89;
+            border: 4px solid #16161e;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 2;
+        }
+        .shelf:hover { transform: scale(1.05); border-color: var(--glow); }
+        .book { height: 30px; width: 100%; background: #f7768e; margin-bottom: 5px; border-radius: 2px; }
+        .book:nth-child(2) { background: #7aa2f7; width: 80%; }
+        .book:nth-child(3) { background: #9ece6a; width: 90%; }
+
+        /* The Desk Area */
+        .desk {
+            position: absolute;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 600px; height: 200px;
+            background: #414868;
+            border-top: 10px solid #24283b;
+            z-index: 10;
+        }
+
+        /* The Computer (Projects) */
+        .monitor {
+            position: absolute;
+            bottom: 120px; left: 50%;
+            transform: translateX(-50%);
+            width: 220px; height: 160px;
+            background: #16161e;
+            border: 4px solid #565f89;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 11;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
         }
-        .star {
+        .monitor:hover { transform: translateX(-50%) scale(1.05); border-color: var(--accent); }
+        .screen-glow {
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, #24283b 0%, #16161e 100%);
+            display: flex; flex-direction: column; justify-content: center; items-center;
+        }
+        .code-lines {
+            width: 80%; height: 2px; background: #9ece6a; margin: 4px 0; opacity: 0.7;
+            animation: type 2s infinite;
+        }
+        @keyframes type { 0% { width: 0; } 50% { width: 80%; } 100% { width: 80%; } }
+
+        /* The Person (You) */
+        .person {
             position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 2s infinite ease-in-out;
-        }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-
-        /* The Vaporwave Sun */
-        .sun {
-            position: fixed;
-            bottom: 10%; left: 50%;
+            bottom: 50px; left: 50%;
             transform: translateX(-50%);
-            width: 40vh; height: 40vh;
-            background: linear-gradient(to top, #fcd34d, #ff0055);
-            border-radius: 50%;
-            box-shadow: 0 0 60px #ff0055;
-            z-index: -1;
-            /* The "blinds" effect on the sun */
-            mask-image: linear-gradient(to bottom, black 60%, transparent 60%, black 65%, transparent 65%, black 75%, transparent 75%, black 90%);
-            -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 60%, black 65%, transparent 65%, black 75%, transparent 75%, black 90%);
+            font-size: 140px;
+            color: #c0caf5;
+            text-shadow: 0 5px 10px rgba(0,0,0,0.5);
+            z-index: 12;
+            pointer-events: none; /* Let clicks pass through to desk/monitor */
         }
-
-        /* --- TYPOGRAPHY --- */
-        .pixel-title {
+        .speech-bubble {
+            position: absolute;
+            top: -60px; right: -80px;
+            background: white; color: black;
+            padding: 10px 15px;
+            border-radius: 20px;
             font-family: 'Press Start 2P', cursive;
-            text-shadow: 4px 4px 0px #903060;
+            font-size: 10px;
+            opacity: 0;
+            animation: popIn 1s ease-out forwards 1s;
         }
+        @keyframes popIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
 
-        /* Typewriter Cursor */
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            background-color: var(--neon-blue);
-            animation: blink 1s infinite;
+        /* --- UI MODALS (Popups) --- */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
         }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .modal-content {
+            background: #1a1b26;
+            border: 2px solid var(--accent);
+            padding: 30px;
+            width: 90%; max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 0 30px var(--accent);
+            position: relative;
+        }
+        .close-btn {
+            position: absolute; top: 10px; right: 15px;
+            color: #f7768e; cursor: pointer; font-size: 24px;
+        }
+        
+        /* Tooltips */
+        .label {
+            position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%);
+            background: black; padding: 4px 8px; font-size: 12px; border-radius: 4px;
+            opacity: 0; transition: opacity 0.2s; white-space: nowrap; pointer-events: none;
+        }
+        .hover-target:hover .label { opacity: 1; }
 
-        /* --- TECH STACK GRID --- */
-        .tech-badge {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s;
-        }
-        .tech-badge:hover {
-            border-color: var(--neon-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-        }
     </style>
 </head>
-<body class="text-xl">
+<body>
 
-    <div class="crt-frame"></div>
-    <div class="scanlines"></div>
+    <div class="room-container">
+        
+        <div class="window hover-target" onclick="openModal('about')">
+            <div class="moon"></div>
+            <div class="label">ABOUT & CONTACT</div>
+        </div>
 
-    <div class="stars" id="starContainer">
-        <div class="sun"></div>
+        <div class="shelf hover-target" onclick="openModal('skills')">
+            <div class="book"></div>
+            <div class="book"></div>
+            <div class="book"></div>
+            <div class="book"></div>
+            <div class="label">SKILLS & KNOWLEDGE</div>
+        </div>
+
+        <div class="monitor hover-target" onclick="openModal('projects')">
+            <div class="screen-glow">
+                <i class="fa-solid fa-code text-green-400 text-2xl mb-2"></i>
+                <div class="code-lines"></div>
+                <div class="code-lines" style="width: 60%"></div>
+            </div>
+            <div class="label">VIEW PROJECTS</div>
+        </div>
+
+        <div class="person">
+            <i class="fa-solid fa-user-astronaut"></i>
+            <div class="speech-bubble">Click objects to explore!</div>
+        </div>
+
+        <div class="desk"></div>
+
     </div>
 
-    <nav class="fixed w-full z-50 top-0 p-6 flex justify-between items-center text-pink-300 backdrop-blur-sm bg-black/20">
-        <div class="font-bold tracking-widest text-lg">
-            <i class="fa-solid fa-terminal text-cyan-400"></i> SYSTEM.ONLINE
-        </div>
-        <div class="flex gap-6 text-xl">
-            <a href="https://github.com/scbe95" target="_blank" class="hover:text-cyan-300 transition hover:scale-110"><i class="fa-brands fa-github"></i> GITHUB</a>
-            <a href="mailto:stephen@example.com" class="hover:text-cyan-300 transition hover:scale-110"><i class="fa-solid fa-envelope"></i> CONTACT</a>
-        </div>
-    </nav>
-
-    <main class="max-w-6xl mx-auto px-6 pt-32 pb-20 grid lg:grid-cols-2 gap-16 items-center min-h-screen relative z-10">
-        
-        <div class="space-y-8 animate-[fadeIn_2s_ease-out]">
+    <div id="projects" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('projects')">&times;</span>
+            <h2 class="text-2xl text-cyan-400 font-bold mb-4 pixel-font">MY PROJECTS</h2>
             
-            <div class="inline-block px-3 py-1 bg-cyan-900/50 border border-cyan-400 text-cyan-300 text-sm rounded mb-2">
-                STATUS: READY TO BUILD
+            <div class="bg-gray-800 p-4 rounded mb-4 border-l-4 border-green-400">
+                <h3 class="text-xl font-bold">Reseller Pro Vision</h3>
+                <p class="text-gray-400 text-sm my-2">Computer vision app that prices items and writes eBay listings automatically.</p>
+                <div class="flex gap-2 text-xs mb-3">
+                    <span class="bg-blue-900 px-2 py-1 rounded">Python</span>
+                    <span class="bg-blue-900 px-2 py-1 rounded">Flask</span>
+                    <span class="bg-blue-900 px-2 py-1 rounded">Generative AI</span>
+                </div>
+                <a href="https://stephens-reseller-app.onrender.com" target="_blank" class="text-green-400 hover:underline">
+                    <i class="fa-solid fa-play"></i> Launch App
+                </a>
             </div>
 
-            <h1 class="text-4xl md:text-6xl leading-tight text-white pixel-title">
-                STEPHEN BENOIT
-            </h1>
-            
-            <div class="text-2xl md:text-3xl text-pink-300 h-16">
-                > <span id="typewriter"></span><span class="cursor">&nbsp;</span>
+            <div class="bg-gray-800 p-4 rounded border-l-4 border-purple-400">
+                <h3 class="text-xl font-bold">Interactive Portfolio</h3>
+                <p class="text-gray-400 text-sm my-2">The website you are looking at right now. A pure CSS/HTML isometric room.</p>
+                <div class="flex gap-2 text-xs mb-3">
+                    <span class="bg-blue-900 px-2 py-1 rounded">HTML5</span>
+                    <span class="bg-blue-900 px-2 py-1 rounded">Tailwind</span>
+                </div>
             </div>
 
-            <p class="text-xl text-slate-300 max-w-lg leading-relaxed bg-black/40 p-4 rounded border-l-4 border-pink-500">
-                I am a software developer exploring the world of AI. I build practical tools using Python and modern web technologies.
+        </div>
+    </div>
+
+    <div id="skills" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('skills')">&times;</span>
+            <h2 class="text-2xl text-pink-400 font-bold mb-6 pixel-font">TECH STACK</h2>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex items-center gap-3">
+                    <i class="fa-brands fa-python text-yellow-400 text-2xl"></i>
+                    <div>
+                        <div class="font-bold">Python</div>
+                        <div class="text-xs text-gray-400">Backend & Scripting</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-brain text-purple-400 text-2xl"></i>
+                    <div>
+                        <div class="font-bold">Generative AI</div>
+                        <div class="text-xs text-gray-400">LLM Integration (Gemini/OpenAI)</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-flask text-white text-2xl"></i>
+                    <div>
+                        <div class="font-bold">Flask</div>
+                        <div class="text-xs text-gray-400">Web Frameworks</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <i class="fa-brands fa-git-alt text-red-500 text-2xl"></i>
+                    <div>
+                        <div class="font-bold">Git / GitHub</div>
+                        <div class="text-xs text-gray-400">Version Control</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="about" class="modal">
+        <div class="modal-content text-center">
+            <span class="close-btn" onclick="closeModal('about')">&times;</span>
+            <div class="w-20 h-20 bg-gray-700 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-2">Stephen Benoit</h2>
+            <p class="text-gray-400 mb-6">Junior AI & Software Developer</p>
+            <p class="text-sm leading-relaxed mb-6">
+                I am a passionate developer building tools that solve real problems. I specialize in connecting AI models to practical applications.
             </p>
-
-            <div>
-                <h3 class="text-cyan-400 mb-4 text-lg border-b border-cyan-400/30 inline-block pb-1">CURRENT ARSENAL</h3>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    <div class="tech-badge p-3 rounded flex items-center gap-2">
-                        <i class="fa-brands fa-python text-yellow-400"></i> Python
-                    </div>
-                    <div class="tech-badge p-3 rounded flex items-center gap-2">
-                        <i class="fa-solid fa-microchip text-blue-400"></i> Google Gemini
-                    </div>
-                    <div class="tech-badge p-3 rounded flex items-center gap-2">
-                        <i class="fa-solid fa-flask text-white"></i> Flask
-                    </div>
-                    <div class="tech-badge p-3 rounded flex items-center gap-2">
-                        <i class="fa-brands fa-html5 text-orange-500"></i> HTML/CSS
-                    </div>
-                    <div class="tech-badge p-3 rounded flex items-center gap-2">
-                        <i class="fa-brands fa-git-alt text-red-500"></i> Git
-                    </div>
-                    <div class="tech-badge p-3 rounded flex items-center gap-2">
-                        <i class="fa-solid fa-terminal text-green-400"></i> VS Code
-                    </div>
-                </div>
-            </div>
+            <a href="mailto:stephen@example.com" class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded font-bold transition">
+                <i class="fa-solid fa-envelope"></i> Send Message
+            </a>
         </div>
-
-        <div class="relative group mt-10 lg:mt-0">
-            <div class="bg-gradient-to-r from-slate-800 to-slate-900 p-3 rounded-t-lg border border-slate-600 flex justify-between items-center shadow-lg">
-                <div class="flex gap-2">
-                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                </div>
-                <div class="text-xs text-slate-400 font-mono">viewing: reseller_pro_v1.py</div>
-            </div>
-
-            <div class="bg-black border-x border-b border-slate-600 p-2 rounded-b-lg shadow-[0_0_40px_rgba(217,70,239,0.3)] transition duration-500 group-hover:shadow-[0_0_60px_rgba(34,211,238,0.4)]">
-                <div class="relative overflow-hidden h-[400px] w-full rounded bg-white">
-                    <iframe src="https://stephens-reseller-app.onrender.com" class="w-full h-full border-0" title="Reseller App"></iframe>
-                    
-                    <a href="https://stephens-reseller-app.onrender.com" target="_blank" class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
-                        <i class="fa-solid fa-play-circle text-6xl text-cyan-400 mb-2 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]"></i>
-                        <span class="text-white pixel-title text-sm">OPEN FULL APP</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-    </main>
+    </div>
 
     <script>
-        // 1. Generate Stars
-        const starContainer = document.getElementById('starContainer');
-        for(let i=0; i<50; i++) {
-            let star = document.createElement('div');
-            star.className = 'star';
-            star.style.width = Math.random() * 3 + 'px';
-            star.style.height = star.style.width;
-            star.style.top = Math.random() * 100 + '%';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 2 + 's';
-            starContainer.appendChild(star);
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
         }
-
-        // 2. Typewriter Effect
-        const text = "AI & SOFTWARE DEVELOPER";
-        const typewriter = document.getElementById('typewriter');
-        let i = 0;
-        function type() {
-            if (i < text.length) {
-                typewriter.innerHTML += text.charAt(i);
-                i++;
-                setTimeout(type, 100); // Speed of typing
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+        // Close modal if clicking outside box
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
             }
         }
-        // Start typing after 1 second
-        setTimeout(type, 1000);
     </script>
 
 </body>
