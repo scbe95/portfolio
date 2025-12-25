@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stephen | AI Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* The "AI Glow" Animation */
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+            animation: move 10s infinite alternate;
+        }
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(20px, -20px) scale(1.1); }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-200 antialiased relative overflow-x-hidden">
+
+    <div class="blob bg-purple-600 w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="blob bg-cyan-600 w-80 h-80 rounded-full bottom-0 right-0 translate-x-1/3 translate-y-1/3 animation-delay-2000"></div>
+
+    <nav class="fixed w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
+                Stephen.AI
+            </a>
+            <div class="space-x-8 hidden md:block text-sm font-semibold text-slate-400">
+                <a href="#projects" class="hover:text-white transition">PROJECTS</a>
+                <a href="#skills" class="hover:text-white transition">SKILLS</a>
+                <a href="#contact" class="hover:text-white transition">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="h-screen flex flex-col justify-center items-center text-center px-6 pt-16">
+        <div class="inline-block px-3 py-1 mb-6 text-xs font-semibold tracking-wider text-cyan-300 uppercase bg-cyan-900/30 rounded-full border border-cyan-800">
+            Available for Hire
+        </div>
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
+            Building the <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Intelligent Future</span>
+        </h1>
+        <p class="text-lg md:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed">
+            I'm Stephen, an AI Software Engineer bridging the gap between complex models and real-world applications.
+        </p>
+        <div class="flex gap-4">
+            <a href="#projects" class="px-8 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-slate-200 transition shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                View Work
+            </a>
+            <a href="https://github.com/scbe95" target="_blank" class="px-8 py-4 border border-slate-700 rounded-full hover:border-slate-500 transition">
+                <i class="fab fa-github mr-2"></i> GitHub
+            </a>
+        </div>
+    </section>
+
+    <section id="projects" class="py-24 bg-slate-800/50">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-3xl font-bold mb-16 text-center">Featured Projects</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="group relative bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition duration-300">
+                    <div class="h-48 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
+                        <i class="fas fa-camera text-6xl text-slate-700 group-hover:text-cyan-400 transition duration-300"></i>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-xl font-bold text-white mb-2">Reseller Pro AI</h3>
+                        <p class="text-slate-400 text-sm mb-6">
+                            Computer Vision app that identifies items from photos, estimates value, and writes sales copy using Gemini 2.5.
+                        </p>
+                        <div class="flex gap-2 mb-6">
+                            <span class="px-3 py-1 text-xs bg-slate-800 rounded-full text-cyan-300">Python</span>
+                            <span class="px-3 py-1 text-xs bg-slate-800 rounded-full text-cyan-300">Flask</span>
+                            <span class="px-3 py-1 text-xs bg-slate-800 rounded-full text-cyan-300">Google Gemini</span>
+                        </div>
+                        <a href="https://stephens-reseller-app.onrender.com" target="_blank" class="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-semibold">
+                            Live Demo <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="group relative bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-purple-500/50 transition duration-300">
+                    <div class="h-48 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
+                        <i class="fas fa-brain text-6xl text-slate-700 group-hover:text-purple-400 transition duration-300"></i>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-xl font-bold text-white mb-2">Coming Soon</h3>
+                        <p class="text-slate-400 text-sm mb-6">
+                            Currently building a financial analysis agent using LangChain and OpenAI.
+                        </p>
+                        <div class="flex gap-2 mb-6">
+                            <span class="px-3 py-1 text-xs bg-slate-800 rounded-full text-purple-300">LLMs</span>
+                            <span class="px-3 py-1 text-xs bg-slate-800 rounded-full text-purple-300">RAG</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 text-center text-slate-500 text-sm border-t border-slate-800">
+        <p>&copy; 2025 Stephen. Built with <i class="fas fa-heart text-red-500"></i> and AI.</p>
+    </footer>
+
+</body>
+</html>
